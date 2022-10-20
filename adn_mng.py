@@ -139,7 +139,9 @@ def deconstr_arancel(x):
 def generate_import_export_fcube(workdir, year):
     fpath = '{}/{}'.format(workdir, year)
     logging.info('Lis folder {}'.format(fpath))
-    for ff in os.listdir(fpath):
+    ffs = os.listdir(fpath)
+    ffs.sort()
+    for ff in ffs:
         fname = '{}/{}'.format(fpath, ff)
         logging.info('Reading file {}'.format(fname))
         dfn = pd.read_csv(fname, sep=';', 
