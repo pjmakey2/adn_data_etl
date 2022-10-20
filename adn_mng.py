@@ -1,9 +1,14 @@
 #coding: latin-1
+import re
 import pandas as pd
 import os, random, math
 import logging
 
 MAP_CURRENCY = {
+    u'SOL PERUANO': 'PEN',
+    u'MARCOS ALEMANES': 'DMK (EURO)',
+    u'DINAR IRAKI': 'IQD',
+    u'PESO CHILENO': 'CLP',
     u'DOLAR ESTADOUNIDENSE': 'USD',
     u'REAL': 'BRL',
     u'MONEDA COMUN EUROPEA': 'EUR',
@@ -122,10 +127,10 @@ ST_CLEAN = [
 
 SEP_I = '  - '
 def extract_currency(x):
-    if unicode(x).find(SEP_I) > 0:
-        for a in  x.split(SEP_I):
-            return a.split('(')[-1].strip().strip('()')
-    return x
+    ffc = re.findall('\([A-Za-z\s]+\)', unicode(x))
+    if ffc:
+        return ffc[0].strip().strip('()')
+    return 'ND'
 
 def deconstr_arancel(x):
     return x.split('.')[0:4]
