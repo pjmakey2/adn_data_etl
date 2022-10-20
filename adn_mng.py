@@ -88,6 +88,38 @@ K_ORDER = [
     u'MONEDA',
 
 ]
+
+ST_CLEAN = [
+    u'ADUANA',
+    u'OPERACION',
+    u'DESPACHO',
+    u'RUBRO',
+    u'CONOCIMIENTO',
+    u'DESTINACION',
+    u'REGIMEN',
+    u'ESTADO',
+    u'DESPACHANTE',
+    u'RUC DESPACHANTE',
+    u'DATOS DESPACHANTE',
+    u'EMAIL DESPACHANTE',
+    u'IMPORTADOR',    
+    u'RUC IMPORTADOR',
+    u'EMAIL IMPORTADOR',
+    u'FACTURA',
+    u'DESC CAPITULO',
+    u'MERCADERIA',
+    u'ACUERDO',    
+    u'PROVEEDOR',
+    u'MEDIO TRANSPORTE',
+    u'CANAL',
+    u'PAIS ORIGEN',
+    u'PAIS DESTINO/PROCEDENCIA',
+    u'USO',
+    u'UNIDAD MEDIDA',
+    u'DESC SUBITEM',
+    u'MARCA SUBITEM',
+]
+
 SEP_I = '  - '
 def extract_currency(x):
     if unicode(x).find(SEP_I) > 0:
@@ -139,8 +171,9 @@ def generate_import_export_fcube(workdir, year):
         dfn['MONEDA'] = dfn['FACTURA'].apply(extract_currency)
         dfn['MONEDA'] = dfn['MONEDA'].map(MAP_CURRENCY).fillna(dfn['MONEDA'])
         dfn['FACTURA'] = dfn['FACTURA'].str.replace('\([A-Z\s]+\)', '').str.replace('\s+', '')
-        dfn['DESC CAPITULO'] = dfn['DESC CAPITULO'].str.replace('\n', '').str.replace('"', '')
-        dfn['DESC SUBITEM'] = dfn['DESC SUBITEM'].str.replace('\n', '').str.replace('"', '')
+        for FIELD in ST_CLEAN:
+            logging.info('Cleanning up strings fields from new line {}'.format(FIELD))
+            dfn[FIELD] = dfn[FIELD].str.replace('\n', '').str.replace('"', '')
         logging.info('Decouple type of operation')
         dfn['POS4'] = 0
         dfn['POS3'] = 0
